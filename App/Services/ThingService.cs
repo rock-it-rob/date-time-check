@@ -1,5 +1,6 @@
 using DateTimeCheck.Data.Context;
 using DateTimeCheck.Data.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Services;
 
@@ -24,5 +25,8 @@ public class ThingService : IThingService
     }
 
     public async Task<Thing?> GetById(int id) =>
-        await _context.FindAsync<Thing>(id);
+        await _context
+            .Things
+            .AsNoTracking()
+            .SingleOrDefaultAsync(t => t.Id == id);
 }
