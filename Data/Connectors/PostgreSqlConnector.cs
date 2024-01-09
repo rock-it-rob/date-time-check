@@ -9,6 +9,7 @@ public static class PostgreSqlConnector
         NpgsqlConnectionStringBuilder connectionStringBuilder)
     {
         var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionStringBuilder.ConnectionString);
-        return builder.UseNpgsql(dataSourceBuilder.Build());
+        dataSourceBuilder.UseNodaTime();
+        return builder.UseNpgsql(dataSourceBuilder.Build(), optionsBuilder => optionsBuilder.UseNodaTime());
     }
 }

@@ -4,6 +4,9 @@ using DateTimeCheck.Data.Context;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NodaTime;
+using NodaTime.Extensions;
+using NodaTime.Text;
 using Npgsql;
 
 var hostBuilder = Host.CreateApplicationBuilder();
@@ -31,7 +34,7 @@ var thing = await service.CreateAsync();
 writer.WriteLine($"Insert Thing: {thing}");
 
 // Update
-thing.When = DateTime.UtcNow;
+thing.When = SystemClock.Instance.InUtc().GetCurrentZonedDateTime();
 writer.WriteLine($"Update Thing: {thing}");
 await service.UpdateAsync(thing);
 
@@ -44,5 +47,7 @@ Console.Write(writer.ToString());
 
 for (var i = 0; i < 4; ++i)
 {
-    Console.WriteLine(DateTime.UtcNow.ToString("O"));
+    var t = SystemClock.Instance.InUtc().GetCurrentZonedDateTime();
+    //Console.WriteLine(ZonedDateTimePattern.ExtendedFormatOnlyIso.Format(t));
+    Console.WriteLine(t.ToString("uuuu-MM-dd HH:mm:ss;FFFFFFFFF", null));
 }

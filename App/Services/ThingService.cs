@@ -1,6 +1,8 @@
 using DateTimeCheck.Data.Context;
 using DateTimeCheck.Data.Model;
 using Microsoft.EntityFrameworkCore;
+using NodaTime;
+using NodaTime.Extensions;
 
 namespace App.Services;
 
@@ -12,7 +14,7 @@ public class ThingService : IThingService
 
     public async Task<Thing> CreateAsync()
     {
-        var thing = new Thing() { When = DateTime.UtcNow };
+        var thing = new Thing() { When = SystemClock.Instance.InUtc().GetCurrentZonedDateTime() };
         _context.Add(thing);
         await _context.SaveChangesAsync();
         return thing;
